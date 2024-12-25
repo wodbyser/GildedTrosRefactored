@@ -8,57 +8,75 @@ class GildedTros {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Good Wine")
-                    && !items[i].name.equals("Backstage passes for Re:Factor")
-                    && !items[i].name.equals("Backstage passes for HAXX"))
-            {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("B-DAWG Keychain")) {
-                        items[i].quality = items[i].quality - 1;
-                    }
-                }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
-
-                    if (items[i].name.equals("Backstage passes for Re:Factor") || items[i].name.equals("Backstage passes for HAXX") ) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
+        for (Item item : items) {
+            switch (item.name) {
+                case "Good Wine":
+                    updateGoodWine(item);
+                    break;
+                case "Backstage passes for Re:Factor":
+                case "Backstage passes for HAXX":
+                    updateBackstagePass(item);
+                    break;
+                case "B-DAWG Keychain":
+                    // B-DAWG Keychain does not degrade in quality or change sellIn
+                    break;
+                default:
+                    updateRegularItem(item);
+                    break;
             }
 
-            if (!items[i].name.equals("B-DAWG Keychain")) {
-                items[i].sellIn = items[i].sellIn - 1;
+            if (!"B-DAWG Keychain".equals(item.name)) {
+                item.sellIn--;
             }
 
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Good Wine")) {
-                    if (!items[i].name.equals("Backstage passes for Re:Factor") && !items[i].name.equals("Backstage passes for HAXX")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("B-DAWG Keychain")) {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
-                    }
-                } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
-                    }
-                }
+            if (item.sellIn < 0) {
+                handleExpiredItem(item);
             }
+        }
+    }
+
+    private void updateGoodWine(Item item) {
+        increaseQuality(item);
+    }
+
+    private void updateBackstagePass(Item item) {
+        increaseQuality(item);
+        if (item.sellIn < 11) {
+            increaseQuality(item);
+        }
+        if (item.sellIn < 6) {
+            increaseQuality(item);
+        }
+    }
+
+    private void updateRegularItem(Item item) {
+        decreaseQuality(item);
+    }
+
+    private void handleExpiredItem(Item item) {
+        switch (item.name) {
+            case "Good Wine":
+                increaseQuality(item);
+                break;
+            case "Backstage passes for Re:Factor":
+            case "Backstage passes for HAXX":
+                item.quality = 0;
+                break;
+            default:
+                decreaseQuality(item);
+                break;
+        }
+    }
+
+    private void increaseQuality(Item item) {
+        if (item.quality < 50) {
+            item.quality++;
+        }
+    }
+
+    private void decreaseQuality(Item item) {
+        if (item.quality > 0) {
+            item.quality--;
         }
     }
 }
