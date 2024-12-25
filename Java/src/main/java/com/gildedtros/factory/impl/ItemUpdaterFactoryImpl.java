@@ -9,11 +9,11 @@ import com.gildedtros.factory.service.ItemUpdaterHelper;
 import java.util.Objects;
 
 public class ItemUpdaterFactoryImpl implements ItemUpdaterFactory {
+    private final ItemUpdaterHelper itemUpdaterHelper = new ItemUpdaterHelper();
+
     @Override
     public ItemUpdater getUpdater(Item item) {
         ItemType itemName = ItemType.fromItemName(item.name);
-
-        ItemUpdaterHelper itemUpdaterHelper = new ItemUpdaterHelper();
 
         switch (Objects.requireNonNull(itemName)) {
             case WINE:

@@ -6,6 +6,7 @@ import com.gildedtros.factory.ItemUpdaterFactory;
 import com.gildedtros.usecase.UpdateGildedTros;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UpdateGildedTrosImpl implements UpdateGildedTros {
@@ -16,8 +17,9 @@ public class UpdateGildedTrosImpl implements UpdateGildedTros {
     }
 
     @Override
-    public GildedTros dailyUpdate(GildedTros gildedTros) {
-        List<Item> updatedItems = gildedTros.items.stream()
+    public GildedTros dailyUpdateItems(GildedTros gildedTros) {
+        List<Item> updatedItems = gildedTros.getItems().stream()
+                .filter(Objects::nonNull)
                 .map(item -> this.itemUpdaterFactory.getUpdater(item).update(item))
                 .collect(Collectors.toList());
 

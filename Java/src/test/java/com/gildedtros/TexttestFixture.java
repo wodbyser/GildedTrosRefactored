@@ -42,7 +42,7 @@ public class TexttestFixture {
                 System.out.println(item);
             }
             System.out.println();
-            app = updater.dailyUpdate(app);
+            app = updater.dailyUpdateItems(app);
         }
     }
 
