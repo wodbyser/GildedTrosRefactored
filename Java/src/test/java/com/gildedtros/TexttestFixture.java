@@ -1,7 +1,17 @@
 package com.gildedtros;
 
+import com.gildedtros.domain.GildedTros;
+import com.gildedtros.domain.Item;
+import com.gildedtros.factory.impl.ItemUpdaterFactoryImpl;
+import com.gildedtros.usecase.UpdateGildedTros;
+import com.gildedtros.usecase.impl.UpdateGildedTrosImpl;
+
+import java.util.Arrays;
+
 public class TexttestFixture {
     public static void main(String[] args) {
+        UpdateGildedTros updater = new UpdateGildedTrosImpl(new ItemUpdaterFactoryImpl());
+
         System.out.println("AXXES CODE KATA - GILDED TROS");
 
         Item[] items = new Item[] {
@@ -18,7 +28,7 @@ public class TexttestFixture {
                 new Item("Long Methods", 3, 6),
                 new Item("Ugly Variable Names", 3, 6) };
 
-        GildedTros app = new GildedTros(items);
+        GildedTros app = new GildedTros(Arrays.asList(items));
 
         int days = 2;
         if (args.length > 0) {
@@ -32,7 +42,7 @@ public class TexttestFixture {
                 System.out.println(item);
             }
             System.out.println();
-            app.updateQuality();
+            app = updater.dailyUpdate(app);
         }
     }
 
