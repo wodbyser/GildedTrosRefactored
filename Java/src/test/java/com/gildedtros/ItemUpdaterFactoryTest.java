@@ -3,12 +3,13 @@ package com.gildedtros;
 import com.gildedtros.domain.Item;
 import com.gildedtros.factory.ItemUpdater;
 import com.gildedtros.factory.impl.*;
+import com.gildedtros.factory.service.ItemUpdaterHelper;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemUpdateFactoryTest {
-    private final ItemUpdaterFactoryImpl itemUpdaterFactory = new ItemUpdaterFactoryImpl();
+class ItemUpdaterFactoryTest {
+    private final ItemUpdaterFactoryImpl underTest = new ItemUpdaterFactoryImpl(new ItemUpdaterHelper());
 
     @Test
     void testGetUpdaterForWineItem() {
@@ -16,7 +17,7 @@ class ItemUpdateFactoryTest {
         Item wineItem = new Item("Good Wine", 10, 40);
 
         // When
-        ItemUpdater updater = itemUpdaterFactory.getUpdater(wineItem);
+        ItemUpdater updater = underTest.getUpdater(wineItem);
 
         // Then
         assertNotNull(updater);
@@ -29,7 +30,7 @@ class ItemUpdateFactoryTest {
         Item backstageItem = new Item("Backstage passes for Re:Factor", 10, 40);
 
         // When
-        ItemUpdater updater = itemUpdaterFactory.getUpdater(backstageItem);
+        ItemUpdater updater = underTest.getUpdater(backstageItem);
 
         // Then
         assertNotNull(updater);
@@ -42,7 +43,7 @@ class ItemUpdateFactoryTest {
         Item legendaryItem = new Item("B-DAWG Keychain", 10, 40);
 
         // When
-        ItemUpdater updater = itemUpdaterFactory.getUpdater(legendaryItem);
+        ItemUpdater updater = underTest.getUpdater(legendaryItem);
 
         // Then
         assertNotNull(updater);
@@ -55,7 +56,7 @@ class ItemUpdateFactoryTest {
         Item smellyItem = new Item("Ugly Variable Names", 10, 40);
 
         // When
-        ItemUpdater updater = itemUpdaterFactory.getUpdater(smellyItem);
+        ItemUpdater updater = underTest.getUpdater(smellyItem);
 
         // Then
         assertNotNull(updater);
@@ -68,7 +69,7 @@ class ItemUpdateFactoryTest {
         Item regularItem = new Item("RegularItem", 10, 40);
 
         // When
-        ItemUpdater updater = itemUpdaterFactory.getUpdater(regularItem);
+        ItemUpdater updater = underTest.getUpdater(regularItem);
 
         // Then
         assertNotNull(updater);

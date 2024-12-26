@@ -9,7 +9,14 @@ import com.gildedtros.factory.service.ItemUpdaterHelper;
 import java.util.Objects;
 
 public class ItemUpdaterFactoryImpl implements ItemUpdaterFactory {
-    private final ItemUpdaterHelper itemUpdaterHelper = new ItemUpdaterHelper();
+    private final ItemUpdaterHelper itemUpdaterHelper;
+
+    public ItemUpdaterFactoryImpl(ItemUpdaterHelper itemUpdaterHelper) {
+        if (itemUpdaterHelper == null) {
+            throw new IllegalArgumentException("itemUpdaterHelper cannot be null");
+        }
+        this.itemUpdaterHelper = itemUpdaterHelper;
+    }
 
     @Override
     public ItemUpdater getUpdater(Item item) {

@@ -4,6 +4,7 @@ import com.gildedtros.domain.GildedTros;
 import com.gildedtros.domain.Item;
 import com.gildedtros.domain.ItemType;
 import com.gildedtros.factory.impl.ItemUpdaterFactoryImpl;
+import com.gildedtros.factory.service.ItemUpdaterHelper;
 import com.gildedtros.usecase.impl.UpdateGildedTrosImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class UpdateGildedTrosTest {
-    private final UpdateGildedTrosImpl underTest = new UpdateGildedTrosImpl(new ItemUpdaterFactoryImpl());
+    private final UpdateGildedTrosImpl underTest = new UpdateGildedTrosImpl(
+            new ItemUpdaterFactoryImpl(new ItemUpdaterHelper())
+    );
 
     private Item createItem(String name, int sellIn, int quality) {
         return new Item(name, sellIn, quality);
@@ -54,6 +57,18 @@ class UpdateGildedTrosTest {
     }
 
     @Test
+    public void goodWineDoubleIncreasesInQualityAfterSellDate() {
+        //Given
+        List<Item> items = List.of(createItem(ItemType.WINE.getItemName(), 0, 10));
+
+        //When
+        underTest.dailyUpdateItems(new GildedTros(items));
+
+        //Then
+        Assertions.assertEquals(12, items.get(0).quality);
+    }
+
+    @Test
     public void qualityIsNeverMoreThan50() {
         //Given
         List<Item> items = List.of(createItem(ItemType.WINE.getItemName(), 10, 50));
@@ -79,7 +94,19 @@ class UpdateGildedTrosTest {
     }
 
     @Test
-    public void backstagePassesIncreaseInQualityAsSellInApproaches() {
+    public void backstagePassesIncreaseBy2When11DaysOrMore() {
+        //Given
+        List<Item> items = List.of(createItem(ItemType.BACKSTAGE_REFACTOR.getItemName(), 11, 10));
+
+        //When
+        underTest.dailyUpdateItems(new GildedTros(items));
+
+        //Then
+        Assertions.assertEquals(11, items.get(0).quality); // Increase by 2
+    }
+
+    @Test
+    public void backstagePassesIncreaseBy2When10DaysOrLess() {
         //Given
         List<Item> items = List.of(createItem(ItemType.BACKSTAGE_REFACTOR.getItemName(), 10, 10));
 

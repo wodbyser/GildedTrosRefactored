@@ -3,6 +3,7 @@ package com.gildedtros;
 import com.gildedtros.domain.GildedTros;
 import com.gildedtros.domain.Item;
 import com.gildedtros.factory.impl.ItemUpdaterFactoryImpl;
+import com.gildedtros.factory.service.ItemUpdaterHelper;
 import com.gildedtros.usecase.UpdateGildedTros;
 import com.gildedtros.usecase.impl.UpdateGildedTrosImpl;
 
@@ -10,7 +11,9 @@ import java.util.Arrays;
 
 public class TexttestFixture {
     public static void main(String[] args) {
-        UpdateGildedTros updater = new UpdateGildedTrosImpl(new ItemUpdaterFactoryImpl());
+        UpdateGildedTros updater = new UpdateGildedTrosImpl(
+                new ItemUpdaterFactoryImpl(new ItemUpdaterHelper())
+        );
 
         System.out.println("AXXES CODE KATA - GILDED TROS");
 
